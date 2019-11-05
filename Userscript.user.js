@@ -5,7 +5,7 @@
 // @author       navchandar
 // @match        http*://*/*
 // @grant        none
-// @license      http://creativecommons.org/licenses/by-nc-sa/3.0/
+// @license      https://opensource.org/licenses/MPL-2.0
 // @run-at       document-idle
 // ==/UserScript==
 
