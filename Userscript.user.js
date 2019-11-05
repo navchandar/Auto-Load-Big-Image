@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      0.1
+// @version      0.2
 // @description  Auto expand image width height quality for image urls with custom sizes
 // @author       navchandar
 // @match        http*://*/*
 // @grant        none
-// @license      https://opensource.org/licenses/MPL-2.0
+// @license      MPL-2.0
+// @copyright    2019, navchandar (https://github.com/navchandar)
 // @run-at       document-idle
 // ==/UserScript==
 
@@ -49,6 +50,29 @@ function widthUpdate(uri, w){
     }
 }
 
+function sizeUpdate(uri, w){
+    if (has(uri, w)) {
+        var res = uri.split(w);
+        if (res.length == 2){
+            var end = "";
+            var width = "";
+            if (has(res[1], "&")){
+                var arr = res[1].split("&");
+                for (var i=1;i<arr.length;i++){
+                    end += "&" + arr[i];
+                }
+                width = arr[0]
+            } else{
+                width = res[1]
+            }
+            if (width != "6000" && isNum(width)){
+                var newuri = res[0] + w + "6000" + end;
+                Load(newuri);
+            }
+        }
+    }
+}
+
 function WidthandHeightUpdate(uri, format, width, height){
     if (has(uri, format) && has(uri, width) && has(uri, height)) {
         var res1 = uri.split(width);
@@ -84,6 +108,37 @@ function WidthandHeightUpdate(uri, format, width, height){
         }
     }
 }
+
+function HeightandWidthUpdate(uri, format, height, width){
+    if (has(uri, format) && has(uri, width) && has(uri, height)) {
+        var res1 = uri.split(height);
+        if (res1.length == 2){
+            var res2 = res1[1].split(width);
+            if (res2.length >= 2){
+                var end = "";
+                var w = "";
+                var h = res2[0];
+                if (has(res2[1], "&")){
+                    var arr = res2[1].split("&");
+                    for (var i=1;i<arr.length;i++){
+                        end += "&" + arr[i];
+                    }
+                    w = arr[0]
+                } else {
+                    w = res2[1]
+                }
+                if (w != "6000" && isNum(w) && isNum(h)){
+                    var w1 = parseInt(w);
+                    var h1 = parseInt(h);
+                    var newh = parseInt((h1/w1) * 6000);
+                    var newuri = res1[0] + height + newh + width + "6000" + end;
+                    Load(newuri);
+                }
+            }
+        }
+    }
+}
+
 
 function QualityUpdate(uri, format, start, end){
     if (has(uri, format) && has(uri, start) && has(uri, end)) {
@@ -133,24 +188,64 @@ function UpdateCustomWidthandHeight(uri, format, regex){
     }
 }
 
+function DPRUpdate(uri, d){
+    if (has(uri, d)){
+        var res = uri.split(d);
+        if (isNum(res[1]) && res[1] < 3){
+            var newuri = res[0] + d + "3";
+            Load(newuri);
+        }
+    }
+}
+
+
+function main(uri, format){
+
+    if (has(uri, "image/upload/")){
+        ReplaceCustomCrop(uri, "."+format, /q\_auto\//g, "q_auto:best/");
+        ReplaceCustomCrop(uri, "."+format, /f\_auto\,|fl\_lossy\,|c\_limit\,/g, "");
+        ReplaceCustomCrop(uri, "."+format, /upload\/[hw]\_\d+\,[hw]\_\d+\//g, "upload/");
+    }
+
+    if (has(uri, "wiki") && has(uri, "thumb/")){
+        ReplaceCustomCrop(uri, "."+format, /thumb\/|\/\w+px-\w+.jpg/g, "");
+    }
+
+    widthUpdate(uri, "."+format+"?w=");
+    WidthandHeightUpdate(uri, "."+format+"?", "w=", "&h=");
+    WidthandHeightUpdate(uri, "."+format+"?", "width=", "&height=");
+
+    HeightandWidthUpdate(uri, "."+format+"?", "h=", "&w=");
+
+    // Remove crops
+    ReplaceCustomCrop(uri, "."+format, /\/\d+\,\d+\,\d+\,\d+\//g, "/");
+    ReplaceCustomCrop(uri, "."+format, /\?crop=\d+\%\d\w\d+\%\d\w\w+\%\w+/g, "");
+    // Remove watermark
+    ReplaceCustomCrop(uri, format, /\&mark64\=(.)*/g, "");
+
+    UpdateCustomWidthandHeight(uri, "."+format, /\/\d+\x\d+\,\d+\//g);
+
+    QualityUpdate(uri, "."+format, "/q_", "/");
+    QualityUpdate(uri, "."+format, "/x,", "/");
+    QualityUpdate(uri, format, "&q=", "&");
+
+    sizeUpdate(uri, "."+format+"?size=");
+    DPRUpdate(uri, "&dpr=");
+
+}
 
 
 (function() {
     'use strict';
     var uri = window.location.href;
-    widthUpdate(uri, ".jpg?w=");
-    widthUpdate(uri, ".png?w=");
-    WidthandHeightUpdate(uri, ".jpg?", "w=", "&h=");
-    WidthandHeightUpdate(uri, ".png?", "w=", "&h=");
-    WidthandHeightUpdate(uri, ".jpg?", "width=", "&height=");
-    WidthandHeightUpdate(uri, ".png?", "width=", "&height=");
-    ReplaceCustomCrop(uri, ".jpg", /\/\d+\,\d+\,\d+\,\d+\//g, "/")
-    ReplaceCustomCrop(uri, ".png", /\/\d+\,\d+\,\d+\,\d+\//g, "/")
-    ReplaceCustomCrop(uri, ".jpg", /\?crop=\d+\%\d\w\d+\%\d\w\w+\%\w+/g, "")
-    ReplaceCustomCrop(uri, ".png", /\?crop=\d+\%\d\w\d+\%\d\w\w+\%\w+/g, "")
-    UpdateCustomWidthandHeight(uri, ".jpg", /\/\d+\x\d+\,\d+\//g);
-    UpdateCustomWidthandHeight(uri, ".png", /\/\d+\x\d+\,\d+\//g);
-    QualityUpdate(uri, ".jpg", "/x,", "/");
-    QualityUpdate(uri, ".png", "/x,", "/");
+    if (has(uri, "jpg")){
+        main(uri, "jpg");
+    }
+    else if (has(uri, "png")){
+        main(uri, "png");
+    }
+    else if (has(uri, "webp")){
+        main(uri, "webp");
+    }
 
 })();
