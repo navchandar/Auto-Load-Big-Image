@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      0.3
+// @version      0.4
 // @description  Auto expand image width height quality for image urls with custom sizes
 // @author       navchandar
 // @match        http*://*/*
@@ -14,6 +14,10 @@
 
 function isNum(num) {
   return !isNaN(num)
+}
+
+function getNum(text) {
+  return parseInt(text.replace(/[^0-9\.]/g, ''), 10);
 }
 
 function Load(uri) {
@@ -85,8 +89,8 @@ function WidthandHeightUpdate(uri, format, width, height) {
       var res2 = res1[1].split(height);
       if (res2.length == 2) {
         if (res2[0] != "6000" && isNum(res2[0]) && isNum(res2[1])) {
-          var w = parseInt(res2[0]);
-          var h = parseInt(res2[1]);
+          var w = getNum(res2[0]);
+          var h = getNum(res2[1]);
           var newh = parseInt((h / w) * 6000);
           var newuri = res1[0] + width + "6000" + height + newh;
           Load(newuri);
@@ -102,8 +106,8 @@ function WidthandHeightUpdate(uri, format, width, height) {
             }
             var res3 = res2[1].split(qual);
             if (res3.length >= 2 && isNum(res2[0]) && isNum(res3[0]) && isNum(res3[1])) {
-              w = parseInt(res2[0]);
-              h = parseInt(res3[0]);
+              w = getNum(res2[0]);
+              h = getNum(res3[0]);
               newh = parseInt((h / w) * 6000);
               newuri = res1[0] + width + "6000" + height + newh + qual + "100";
               Load(newuri);
@@ -135,8 +139,8 @@ function HeightandWidthUpdate(uri, format, height, width) {
           w = res2[1]
         }
         if (w != "6000" && isNum(w) && isNum(h)) {
-          var w1 = parseInt(w);
-          var h1 = parseInt(h);
+          var w1 = getNum(w);
+          var h1 = getNum(h);
           var newh = parseInt((h1 / w1) * 6000);
           var newuri = res1[0] + height + newh + width + "6000" + end;
           Load(newuri);
@@ -182,8 +186,8 @@ function UpdateCustomWidthandHeight(uri, format, regex) {
           var res1 = rep.split("x");
           var res2 = res1[1].split(",");
           if (res1[0] != "6000" && res2.length >= 2 && isNum(res1[0]) && isNum(res2[0]) && isNum(res2[1])) {
-            var w = parseInt(res1[0]);
-            var h = parseInt(res2[0]);
+            var w = getNum(res1[0]);
+            var h = getNum(res2[0]);
             var newh = parseInt((h / w) * 6000);
             var replacement = "/" + 6000 + "x" + newh + ",100" + "/";
             var newuri = uri.replace(res, replacement);
@@ -193,6 +197,22 @@ function UpdateCustomWidthandHeight(uri, format, regex) {
       }
     }
     catch (err) {}
+  }
+}
+
+function CustomWidthandHeightUpdate(uri, width, height) {
+  if (has(uri, width) && has(uri, height)) {
+    var res1 = uri.split(width);
+    var res2 = res1[1].split(height);
+    if (isNum(res2[0]) && res2[0] != "6000") {
+      var w = getNum(res2[0]);
+      var h = getNum(res2[1]);
+      var res = width + w + height + h;
+      var newh = parseInt((h / w) * 6000);
+      var replacement = width + 6000 + height + newh;
+      var newuri = uri.replace(res, replacement);
+      Load(newuri);
+    }
   }
 }
 
@@ -227,6 +247,10 @@ function main(uri, format) {
     ReplaceCustomCrop(uri, ".png", /thumb\/|\/\w+px(.)*\.png(.)*/g, "");
   }
 
+  if (has(uri, "usercontent")) {
+    CustomWidthandHeightUpdate(uri, "=w", "-h");
+  }
+
   widthUpdate(uri, "." + format + "?w=");
   WidthandHeightUpdate(uri, "." + format + "?", "w=", "&h=");
   WidthandHeightUpdate(uri, "." + format + "?", "width=", "&height=");
@@ -240,6 +264,7 @@ function main(uri, format) {
   ReplaceCustomCrop(uri, format, /\&mark64\=(.)*/g, "");
   // Auto Enhance
   ReplaceCustomCrop(uri, format, /auto\=compress/g, "auto=enhance");
+  ReplaceCustomCrop(uri, format, /\&cs\=tinysrgb/g, "");
 
   UpdateCustomWidthandHeight(uri, "." + format, /\/\d+\x\d+\,\d+\//g);
 
@@ -266,6 +291,9 @@ function main(uri, format) {
   }
   else if (has(uri, "webp")) {
     main(uri, "webp");
+  }
+  else if (has(uri, "usercontent.com")) {
+    main(uri, "usercontent");
   }
 
 })();
