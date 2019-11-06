@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      0.2
+// @version      0.3
 // @description  Auto expand image width height quality for image urls with custom sizes
 // @author       navchandar
 // @match        http*://*/*
@@ -203,6 +203,13 @@ function DPRUpdate(uri, d) {
       var newuri = res[0] + d + "3";
       Load(newuri);
     }
+    else if (!isNum(res[1]) && has(res[1], "&")) {
+      var res2 = res[1].split("&")[0];
+      if (isNum(res2) && res2 < 3) {
+        newuri = uri.replace((d + res2), (d + "3"));
+        Load(newuri);
+      }
+    }
   }
 }
 
@@ -231,6 +238,8 @@ function main(uri, format) {
   ReplaceCustomCrop(uri, "." + format, /\?crop=\d+\%\d\w\d+\%\d\w\w+\%\w+/g, "");
   // Remove watermark
   ReplaceCustomCrop(uri, format, /\&mark64\=(.)*/g, "");
+  // Auto Enhance
+  ReplaceCustomCrop(uri, format, /auto\=compress/g, "auto=enhance");
 
   UpdateCustomWidthandHeight(uri, "." + format, /\/\d+\x\d+\,\d+\//g);
 
@@ -251,6 +260,9 @@ function main(uri, format) {
   }
   else if (has(uri, "png")) {
     main(uri, "png");
+  }
+  else if (has(uri, "jpeg")) {
+    main(uri, "jpeg");
   }
   else if (has(uri, "webp")) {
     main(uri, "webp");
