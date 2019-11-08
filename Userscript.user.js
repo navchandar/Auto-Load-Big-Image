@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      0.4
+// @version      0.6
 // @description  Auto expand image width height quality for image urls with custom sizes
 // @author       navchandar
 // @match        http*://*/*
 // @grant        none
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==
 // @license      MPL-2.0
 // @copyright    2019, navchandar (https://github.com/navchandar)
 // @downloadURL  https://openuserjs.org/install/navchandar/Auto_Load_Big_Image.user.js
@@ -206,12 +207,14 @@ function CustomWidthandHeightUpdate(uri, width, height) {
     var res2 = res1[1].split(height);
     if (isNum(res2[0]) && res2[0] != "6000") {
       var w = getNum(res2[0]);
-      var h = getNum(res2[1]);
+      var h = getNum(res2[1].split("-")[0]);
       var res = width + w + height + h;
       var newh = parseInt((h / w) * 6000);
       var replacement = width + 6000 + height + newh;
       var newuri = uri.replace(res, replacement);
-      Load(newuri);
+      if (uri != newuri) {
+        Load(newuri);
+      }
     }
   }
 }
@@ -242,13 +245,25 @@ function main(uri, format) {
   }
 
   if (has(uri, "wiki")) {
-    ReplaceCustomCrop(uri, ".svg", /thumb\/|\/\w+px-\w+\.svg(.)*/g, "");
-    ReplaceCustomCrop(uri, ".jpg", /thumb\/|\/\w+px(.)*\.jpg(.)*/g, "");
-    ReplaceCustomCrop(uri, ".png", /thumb\/|\/\w+px(.)*\.png(.)*/g, "");
+    ReplaceCustomCrop(uri, ".svg", /thumb\/|\/\d+px[-]?\w+(.)*.svg(.)*/g, "");
+    ReplaceCustomCrop(uri, ".jpg", /thumb\/|\/\d+px[-]?\w+(.)*.jpg(.)*/g, "");
+    ReplaceCustomCrop(uri, ".png", /thumb\/|\/\d+px[-]?\w+(.)*.png(.)*/g, "");
+    ReplaceCustomCrop(uri, "." + format, /\/zoom\-crop\/(.)*/g, "");
+  }
+
+  if (has(uri, "twimg") && !has(uri, "video")) {
+    ReplaceCustomCrop(uri, format, /\_normal\./g, ".");
+    if (has(uri, "name")) {
+      ReplaceCustomCrop(uri, format, /\?format\=jpg\&name\=(.)*/g, "?format=png&name=large");
+    }
+    else if (has(uri, "format")) {
+      ReplaceCustomCrop(uri, format, /\?format\=jp(.)*/g, "?format=png");
+    }
   }
 
   if (has(uri, "usercontent")) {
     CustomWidthandHeightUpdate(uri, "=w", "-h");
+    ReplaceCustomCrop(uri, format, /\?s\=\d+\&v\=\d+/g, "");
   }
 
   widthUpdate(uri, "." + format + "?w=");
