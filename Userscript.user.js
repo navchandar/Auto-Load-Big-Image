@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      0.6
+// @version      0.7
 // @description  Auto expand image width height quality for image urls with custom sizes
 // @author       navchandar
 // @match        http*://*/*
@@ -267,14 +267,25 @@ function main(uri, format) {
   }
 
   widthUpdate(uri, "." + format + "?w=");
+  widthUpdate(uri, "." + format + "?width=");
   WidthandHeightUpdate(uri, "." + format + "?", "w=", "&h=");
   WidthandHeightUpdate(uri, "." + format + "?", "width=", "&height=");
 
   HeightandWidthUpdate(uri, "." + format + "?", "h=", "&w=");
+  HeightandWidthUpdate(uri, "." + format + "?", "height=", "&width=");
 
   // Remove crops
   ReplaceCustomCrop(uri, "." + format, /\/\d+\,\d+\,\d+\,\d+\//g, "/");
   ReplaceCustomCrop(uri, "." + format, /\?crop=\d+\%\d\w\d+\%\d\w\w+\%\w+/g, "");
+  ReplaceCustomCrop(uri, "." + format, /\?crop=\d+\%3A\d+|\?crop=\d+\:\d+/g, "");
+  ReplaceCustomCrop(uri, "." + format, /thumbor\/\d+x\d+\//g, "thumbor/origxorig/");
+  if (!has(uri, "%2F2000")) {
+    ReplaceCustomCrop(uri, "." + format, /\%2F\d+x0.jpg/g, "%2F2000x0.jpg");
+  }
+  if (!has(uri, "/2000")) {
+    ReplaceCustomCrop(uri, "." + format, /\/\d+x0.jpg/g, "/2000x0.jpg");
+  }
+
   // Remove watermark
   ReplaceCustomCrop(uri, format, /\&mark64\=(.)*/g, "");
   // Auto Enhance
