@@ -1,6 +1,6 @@
 # Auto Load Big Image
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://github.com/navchandar/Auto-Load-Big-Image/blob/master/LICENSE)
-[![HitCount](http://hits.dwyl.io/navchandar/Auto-Load-Big-Image.svg)](http://hits.dwyl.io/navchandar/Auto-Load-Big-Image)
+[![HitCount](http://hits.dwyl.io/navchandar/Auto-Load-Big-Image.svg)](http://hits.dwyl.io/navchandar/Auto-Load-Big-Image) [![Maintainability](https://api.codeclimate.com/v1/badges/eeb60e1eb843b08f1992/maintainability)](https://codeclimate.com/github/navchandar/Auto-Load-Big-Image/maintainability) ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
 [![Twitter Follow navchandar][1.1]][1]
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T6T617N9I)
