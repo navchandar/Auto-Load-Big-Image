@@ -1,16 +1,17 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      0.7
-// @description  Auto expand image width height quality for image urls with custom sizes
+// @version      1.0
+// @description  Auto expand image width height quality for image urls with custom sizes.
 // @author       navchandar
 // @match        http*://*/*
 // @grant        none
-// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==
 // @license      MPL-2.0
+// @run-at       document-idle
+// @homepage     https://github.com/navchandar
 // @copyright    2019, navchandar (https://github.com/navchandar)
 // @downloadURL  https://openuserjs.org/install/navchandar/Auto_Load_Big_Image.user.js
 // @updateURL    https://openuserjs.org/meta/navchandar/Auto_Load_Big_Image.meta.js
-// @run-at       document-idle
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAKElEQVQ4jWNgYGD4Twzu6FhFFGYYNXDUwGFpIAk2E4dHDRw1cDgaCAASFOffhEIO3gAAAABJRU5ErkJggg==
 // ==/UserScript==
 
 function isNum(num) {
