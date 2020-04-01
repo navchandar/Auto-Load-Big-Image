@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      1.0
+// @version      1.1
 // @description  Auto expand image width height quality for image urls with custom sizes.
 // @author       navchandar
 // @match        http*://*/*
@@ -251,7 +251,9 @@ function main(uri, format) {
     ReplaceCustomCrop(uri, ".png", /thumb\/|\/\d+px[-]?\w+(.)*.png(.)*/g, "");
     ReplaceCustomCrop(uri, "." + format, /\/zoom\-crop\/(.)*/g, "");
   }
-
+  if (has(uri, "blogspot") && !has(uri, "/s6000/")) {
+    ReplaceCustomCrop(uri, "." + format, /\/s\d+\//g, "/s6000/");
+  }
   if (has(uri, "twimg") && !has(uri, "video")) {
     ReplaceCustomCrop(uri, format, /\_normal\./g, ".");
     if (has(uri, "name")) {
