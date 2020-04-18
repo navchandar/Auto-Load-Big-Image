@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      1.1
+// @version      1.2
 // @description  Auto expand image width height quality for image urls with custom sizes.
 // @author       navchandar
 // @match        http*://*/*
@@ -8,6 +8,8 @@
 // @license      MPL-2.0
 // @run-at       document-idle
 // @homepage     https://github.com/navchandar
+// @contributionURL https://paypal.me/navchandar
+// @contributionAmount $1.00
 // @copyright    2019, navchandar (https://github.com/navchandar)
 // @downloadURL  https://openuserjs.org/install/navchandar/Auto_Load_Big_Image.user.js
 // @updateURL    https://openuserjs.org/meta/navchandar/Auto_Load_Big_Image.meta.js
@@ -258,6 +260,7 @@ function main(uri, format) {
     ReplaceCustomCrop(uri, format, /\_normal\./g, ".");
     if (has(uri, "name")) {
       ReplaceCustomCrop(uri, format, /\?format\=jpg\&name\=(.)*/g, "?format=png&name=large");
+      ReplaceCustomCrop(uri, format, /\?format\=png\&name\=(.)*/g, "?format=png&name=large");
     }
     else if (has(uri, "format")) {
       ReplaceCustomCrop(uri, format, /\?format\=jp(.)*/g, "?format=png");
