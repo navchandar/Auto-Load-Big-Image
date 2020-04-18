@@ -260,7 +260,7 @@ function main(uri, format) {
     ReplaceCustomCrop(uri, format, /\_normal\./g, ".");
     if (has(uri, "name")) {
       ReplaceCustomCrop(uri, format, /\?format\=jpg\&name\=(.)*/g, "?format=png&name=large");
-      ReplaceCustomCrop(uri, format, /\?format\=png\&name\=(.)*/g, "?format=png&name=large");
+      ReplaceCustomCrop(uri, format, /\?format\=png\&name\=medium/g, "?format=png&name=large");
     }
     else if (has(uri, "format")) {
       ReplaceCustomCrop(uri, format, /\?format\=jp(.)*/g, "?format=png");
