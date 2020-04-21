@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      1.2
+// @version      1.3
 // @description  Auto expand image width height quality for image urls with custom sizes.
 // @author       navchandar
 // @match        http*://*/*
@@ -290,6 +290,19 @@ function main(uri, format) {
   }
   if (!has(uri, "/2000")) {
     ReplaceCustomCrop(uri, "." + format, /\/\d+x0.jpg/g, "/2000x0.jpg");
+  }
+
+  // Remove Blur and bring original
+  if (has(uri, '.it/') && has(uri, 'blur') && !has(uri, 'external-preview.')) {
+    if (has(uri, '?blur')) {
+      ReplaceCustomCrop(uri, format, /\?blur\=(.)*/g, "");
+    }
+    else if (has(uri, '?width=')) {
+      ReplaceCustomCrop(uri, format, /\?width\=(.)*/g, "");
+    }
+    if (has(uri, 'preview.')) {
+      ReplaceCustomCrop(uri, format, /preview/, "i");
+    }
   }
 
   // Remove watermark
