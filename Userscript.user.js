@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Auto Load Big Image
-// @version      1.5
+// @version      1.6
 // @description  Auto expand image width height quality for image urls with custom sizes.
 // @author       navchandar
 // @match        http*://*/*
@@ -265,6 +265,7 @@ function main(uri, format) {
     ReplaceCustomCrop(uri, format, /\_normal\./g, ".");
     if (has(uri, "name")) {
       ReplaceCustomCrop(uri, format, /\?format\=jpg\&name\=(.)*/g, "?format=png&name=large");
+      ReplaceCustomCrop(uri, format, /\?format\=png\&name\=[^(large)(4)](.*)/g, "?format=png&name=large");
       ReplaceCustomCrop(uri, format, /\?format\=png\&name\=medium/g, "?format=png&name=large");
     }
     else if (has(uri, "format")) {
