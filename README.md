@@ -1,7 +1,9 @@
 # Auto Load Big Image
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://github.com/navchandar/Auto-Load-Big-Image/blob/master/LICENSE)
-[![Maintainability](https://api.codeclimate.com/v1/badges/eeb60e1eb843b08f1992/maintainability)](https://codeclimate.com/github/navchandar/Auto-Load-Big-Image/maintainability) ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
-[![Twitter Follow navchandar][1.1]][1]
+[![Maintainability](https://api.codeclimate.com/v1/badges/eeb60e1eb843b08f1992/maintainability)](https://codeclimate.com/github/navchandar/Auto-Load-Big-Image/maintainability) 
+[![openuserjs](https://img.shields.io/badge/dynamic/json?style=flat-square&color=eee&amp;label=OpenUserJS&amp;query=%24.OpenUserJS.installs%5B0%5D.value&amp;suffix=%20installs&amp;url=https%3A%2F%2Fopenuserjs.org%2Fmeta%2Fnavchandar%2FAuto_Load_Big_Image.meta.json)](https://openuserjs.org/scripts/navchandar/Auto_Load_Big_Image)
+[![greasyfork](https://img.shields.io/badge/dynamic/json?style=flat-square&color=blue&amp;label=GreasyFork&amp;query=total_installs&amp;suffix=%20installs&amp;url=https%3A%2F%2Fgreasyfork.org%2Fscripts%2F398185.json)](https://greasyfork.org/en/scripts/398185-auto-load-big-image)
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat) [![Twitter Follow navchandar][1.1]][1]
 
 
 ### Auto expand image width height quality for image urls with custom sizes
